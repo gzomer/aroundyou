@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <title>
+            AroundYou - Making the world accessible for visually impaired people
+        </title>
+        <meta charset="utf-8">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+        <meta name="apple-mobile-web-app-title" content="AroundYou">
+        <meta name="application-name" content="AroundYou">
+        <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="theme-color" content="#ffffff">
+        <link rel="stylesheet" type="text/css" href="/css/main.css">
+    </head>
+    <body>
+        <div id="intro">
+            Around You
+        </div>
+        <audio src="https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3" class="audio-file"></audio>
+        <canvas id="overlay" class="canvas"></canvas>
+        <video id="video" class="video" autoplay muted playsinline></video>
+        <div id="message" class="message-container">
+            <h1 id="mode"></h1>
+            <div class="recognition">
+                <h3 id="tag" class="tag"></h3>
+                <h3 id="pattern" class="tag"></h3>
+                <h3 id="color" class="tag"></h3>
+                <h3 id="clothing" class="tag"></h3>
+                <p id="description" ></p>
+                <p id="params"></p>
+            </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js" integrity="sha512-v8ng/uGxkge3d1IJuEo6dJP8JViyvms0cly9pnbfRxT6/31c3dRWxIiwGnMSWwZjHKOuY3EVmijs7k1jz/9bLA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            var apps = {}
+        </script>
+        <script src="js/audio.js"></script>
+        <script src="js/video.js"></script>
+        <script src="js/socket.js"></script>
+        <script src="js/tts.js"></script>
+        <script src="js/nlp.js"></script>
+        <script src="js/intro.js"></script>
+        <script src="js/app.js"></script>
+    </body>
+</html>
