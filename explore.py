@@ -23,11 +23,7 @@ MAX_DIM = 299
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 start_token = tokenizer.convert_tokens_to_ids(tokenizer._cls_token)
 end_token = tokenizer.convert_tokens_to_ids(tokenizer._sep_token)
-image_transform = tv.transforms.Compose([
-    tv.transforms.Lambda(resize_image),
-    tv.transforms.ToTensor(),
-    tv.transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-])
+image_transform = None
 
 class Config(object):
     def __init__(self):
@@ -46,7 +42,7 @@ class Config(object):
         self.backbone = 'resnet101'
         self.position_embedding = 'sine'
         self.dilation = True
-        
+
         # Basic
         self.device = 'cuda'
         self.seed = 42
@@ -71,12 +67,20 @@ class Config(object):
 
         # Dataset
         self.limit = -1
-    
+
 def setup_model():
+    global image_transform
+    image_transform = tv.transforms.Compose([
+        tv.transforms.Lambda(resize_image),
+        tv.transforms.ToTensor(),
+        tv.transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+    ])
     model = torch.hub.load('saahiluppal/catr', 'v3', pretrained=True)
+    if torch.cuda.is_available():
+        model.cuda()
     model.eval()
     return model
-    
+
 def create_caption_and_mask(start_token, max_length):
     caption_template = torch.zeros((1, max_length), dtype=torch.long)
     mask_template = torch.ones((1, max_length), dtype=torch.bool)
@@ -89,12 +93,17 @@ def create_caption_and_mask(start_token, max_length):
 @torch.no_grad()
 def get_caption(model, image):
     caption, cap_mask = create_caption_and_mask(start_token, config.max_position_embeddings)
-    
+    if DEVICE == 'cuda':
+        image = image.to(DEVICE)
+        caption = caption.to(DEVICE)
+        cap_mask = cap_mask.to(DEVICE)
+
     for i in range(config.max_position_embeddings - 1):
+
         predictions = model(image, caption, cap_mask)
         predictions = predictions[:, i, :]
         predicted_id = torch.argmax(predictions, axis=-1)
-    
+
         # If is end token
         if predicted_id[0] == 102:
             return caption
@@ -118,15 +127,12 @@ def resize_image(image):
     return image
 
 def inference(input_image):
+    global image_transform
     image = image_transform(input_image)
     image = image.unsqueeze(0)
 
-    if torch.cuda.is_available():
-        input_batch = input_batch.to(DEVICE)
-        model.to(DEVICE)
-    
     caption = get_caption(model, image)
-    
+
     result = tokenizer.decode(caption[0].tolist(), skip_special_tokens=True)
     return {'text': result.capitalize()}
 
