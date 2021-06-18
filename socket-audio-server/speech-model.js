@@ -93,7 +93,7 @@ let SpeechModel = {
     }
 
     var nouns = NLP.getNouns(text)
-    if (nouns.length > 0 && false) {
+    if (nouns.length > 0) {
       return {
         text: text,
         action: {

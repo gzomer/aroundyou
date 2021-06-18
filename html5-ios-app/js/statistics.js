@@ -55,7 +55,6 @@ var Statistics = function() {
         var signals = Array(y.length).fill(0)
         var filteredY = y.slice(0)
         const lead_in = y.slice(0, lag)
-        //console.log("1: " + lead_in.toString())
 
         var avgFilter = []
         avgFilter[lag - 1] = this.mean(lead_in)
