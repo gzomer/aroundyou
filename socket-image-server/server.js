@@ -32,7 +32,7 @@ const API_DEBOUNCE = {
     'clothing': 1,
     'objects': 1,
     'explore': 1,
-    'segmentation': 1,
+    'walking': 1,
     'reading': 1,
     'menu': 1,
     'products': 1,
@@ -52,7 +52,6 @@ io.on('connection', function(socket) {
     });
 
     socket.on('stream-data', function(data) {
-
         if (typeof data.mode === 'undefined') {
             return
         }
