@@ -16,7 +16,7 @@ app = Flask(__name__)
 all_words = words.words()
 
 with open('./data/brands.txt') as f:
-    brands_words = [line.trim() for line in f.readlines()]
+    brands_words = [line.strip() for line in f.readlines()]
 
 def get_grayscale(image):
     return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
